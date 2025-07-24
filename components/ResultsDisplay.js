@@ -1,4 +1,3 @@
-// ===== components/ResultsDisplay.js =====
 import React from 'react';
 import { Star, Zap, Shield, Sword } from 'lucide-react';
 
