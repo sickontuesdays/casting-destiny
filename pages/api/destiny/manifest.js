@@ -1,4 +1,3 @@
-// ===== pages/api/destiny/manifest.js =====
 import { getManifest, getManifestComponent } from '../../../lib/bungie-api';
 
 export default async function handler(req, res) {
