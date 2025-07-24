@@ -41,7 +41,7 @@ export default function Home() {
     <>
       <Head>
         <title>Casting Destiny</title>
-        <meta name="description" content="Cast your perfect Destiny 2 build based on your playstyle - discover synergistic components that work together" />
+        <meta name="description" content="Search for keywords from everywhere in Destiny 2" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
@@ -69,7 +69,7 @@ export default function Home() {
               color: '#b3b3b3',
               fontSize: '1.1rem'
             }}>
-              Cast your perfect Guardian build by describing your playstyle - discover the components that create perfect synergy
+              Search for keywords from everywhere in Destiny 2
             </p>
           </div>
 
