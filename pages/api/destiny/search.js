@@ -1,4 +1,3 @@
-// ===== pages/api/destiny/search.js =====
 import { getManifestComponent } from '../../../lib/bungie-api';
 import { processKeywords } from '../../../lib/destiny-data';
 
