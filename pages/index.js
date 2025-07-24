@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import BuildCreator from '../components/BuildCreator';
 import ResultsDisplay from '../components/ResultsDisplay';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function Home() {
   const [searchResults, setSearchResults] = useState(null);
@@ -44,38 +45,56 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-        {/* Background Effects */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-yellow-400/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="relative z-10 container mx-auto px-4 py-8 max-w-6xl">
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
+        color: '#e6e6e6',
+        padding: '20px'
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto'
+        }}>
           {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 mb-4">
+          <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+            <h1 style={{
+              color: '#f4a724',
+              fontSize: '2.5rem',
+              marginBottom: '10px',
+              textShadow: '0 0 10px rgba(244, 167, 36, 0.3)'
+            }}>
               🔮 Casting Destiny
             </h1>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p style={{
+              color: '#b3b3b3',
+              fontSize: '1.1rem'
+            }}>
               Cast your perfect Guardian build by describing your playstyle - discover the components that create perfect synergy
             </p>
           </div>
 
           {/* Build Creator */}
-          <div className="mb-8">
-            <BuildCreator onSearch={handleSearch} isLoading={isLoading} />
-          </div>
+          <BuildCreator onSearch={handleSearch} isLoading={isLoading} />
+
+          {/* Loading */}
+          {isLoading && <LoadingSpinner />}
 
           {/* Error Display */}
           {error && (
-            <div className="bg-red-900/50 border border-red-500/50 rounded-xl p-4 mb-8">
-              <p className="text-red-300">⚠️ {error}</p>
+            <div style={{
+              background: 'rgba(255, 0, 0, 0.1)',
+              border: '1px solid rgba(255, 0, 0, 0.3)',
+              borderRadius: '10px',
+              padding: '15px',
+              marginBottom: '20px',
+              color: '#ff6b6b'
+            }}>
+              ⚠️ {error}
             </div>
           )}
 
           {/* Results */}
-          {searchResults && (
+          {searchResults && !isLoading && (
             <ResultsDisplay 
               results={searchResults.results}
               totalFound={searchResults.totalFound}
