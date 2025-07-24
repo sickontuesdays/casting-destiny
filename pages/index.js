@@ -1,4 +1,3 @@
-// ===== pages/index.js =====
 import React, { useState } from 'react';
 import Head from 'next/head';
 import BuildCreator from '../components/BuildCreator';
