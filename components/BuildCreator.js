@@ -29,7 +29,7 @@ const BuildCreator = ({ onSearch, isLoading }) => {
         color: '#f4a724',
         marginBottom: '15px',
         fontSize: '1.3rem'
-      }}>What's Your Playstyle?</h2>
+      }}>What are you looking for today?</h2>
       
       <form onSubmit={handleSubmit}>
         <input
@@ -116,7 +116,7 @@ const BuildCreator = ({ onSearch, isLoading }) => {
             }
           }}
         >
-          {isLoading ? 'Casting...' : 'Cast My Perfect Build'}
+          {isLoading ? 'Searching...' : 'Deploy Keyword Search'}
         </button>
       </form>
     </div>
