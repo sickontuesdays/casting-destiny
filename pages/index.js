@@ -106,3 +106,19 @@ export default function Home() {
     </>
   );
 }
+
+// Add global styles for animations
+const GlobalStyle = () => (
+  <style jsx global>{`
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+  `}</style>
+);
