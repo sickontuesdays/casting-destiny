@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { Search } from 'lucide-react';
-import LoadingSpinner from './LoadingSpinner';
 
 const BuildCreator = ({ onSearch, isLoading }) => {
   const [keywords, setKeywords] = useState('');
@@ -12,66 +10,115 @@ const BuildCreator = ({ onSearch, isLoading }) => {
     }
   };
 
-  const quickSuggestions = [
-    '🔥 Constant Grenades',
-    '🔄 Never Reload', 
-    '⚡ Fast Super',
-    '👻 Invisibility',
-    '💚 Healing',
-    '👊 Melee Focus',
-    '❄️ Stasis Effects',
-    '🌟 Orb Generation'
-  ];
-
-  const addSuggestion = (suggestion) => {
-    const cleanSuggestion = suggestion.replace(/^[🔥🔄⚡👻💚👊❄️🌟]\s/, '');
-    const newValue = keywords ? `${keywords}, ${cleanSuggestion}` : cleanSuggestion;
+  const addSuggestion = (text) => {
+    const currentValue = keywords;
+    const newValue = currentValue ? `${currentValue}, ${text}` : text;
     setKeywords(newValue);
   };
 
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-yellow-400/20">
-      <h2 className="text-2xl font-bold text-yellow-400 mb-6">
-        Cast Your Perfect Guardian Build
-      </h2>
+    <div style={{
+      background: 'rgba(255, 255, 255, 0.1)',
+      backdropFilter: 'blur(10px)',
+      borderRadius: '15px',
+      padding: '25px',
+      marginBottom: '30px',
+      border: '1px solid rgba(244, 167, 36, 0.2)'
+    }}>
+      <h2 style={{
+        color: '#f4a724',
+        marginBottom: '15px',
+        fontSize: '1.3rem'
+      }}>What's Your Playstyle?</h2>
       
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="relative">
-          <input
-            type="text"
-            value={keywords}
-            onChange={(e) => setKeywords(e.target.value)}
-            placeholder="e.g., constant grenades, never reload, fast super..."
-            className="w-full px-6 py-4 bg-gray-900/70 border-2 border-yellow-400/30 rounded-xl text-white placeholder-gray-400 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 transition-all"
-            disabled={isLoading}
-          />
-          <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-        </div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={keywords}
+          onChange={(e) => setKeywords(e.target.value)}
+          placeholder="e.g., constant grenades, never reload, fast super, invisibility chains..."
+          style={{
+            width: '100%',
+            padding: '15px',
+            background: 'rgba(0, 0, 0, 0.3)',
+            border: '2px solid rgba(244, 167, 36, 0.3)',
+            borderRadius: '10px',
+            color: '#e6e6e6',
+            fontSize: '1rem',
+            transition: 'all 0.3s ease',
+            marginBottom: '15px'
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = '#f4a724';
+            e.target.style.boxShadow = '0 0 15px rgba(244, 167, 36, 0.3)';
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = 'rgba(244, 167, 36, 0.3)';
+            e.target.style.boxShadow = 'none';
+          }}
+        />
         
-        <div className="flex flex-wrap gap-3">
-          {quickSuggestions.map((suggestion, index) => (
-            <button
-              key={index}
-              type="button"
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '20px' }}>
+          {['constant grenades', 'never reload', 'fast super', 'invisibility', 'healing', 'melee damage'].map((suggestion) => (
+            <div
+              key={suggestion}
               onClick={() => addSuggestion(suggestion)}
-              className="px-4 py-2 bg-yellow-400/20 text-yellow-400 rounded-full text-sm hover:bg-yellow-400/30 transition-colors border border-yellow-400/30 hover:border-yellow-400/50"
-              disabled={isLoading}
+              style={{
+                background: 'rgba(244, 167, 36, 0.2)',
+                color: '#f4a724',
+                padding: '8px 15px',
+                borderRadius: '25px',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                border: '1px solid rgba(244, 167, 36, 0.3)',
+                fontSize: '0.9rem'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(244, 167, 36, 0.4)';
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(244, 167, 36, 0.2)';
+                e.target.style.transform = 'translateY(0)';
+              }}
             >
-              {suggestion}
-            </button>
+              🔥 {suggestion.charAt(0).toUpperCase() + suggestion.slice(1)}
+            </div>
           ))}
         </div>
         
         <button
           type="submit"
           disabled={!keywords.trim() || isLoading}
-          className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold rounded-xl hover:from-yellow-400 hover:to-orange-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
+          style={{
+            width: '100%',
+            padding: '15px',
+            background: 'linear-gradient(45deg, #f4a724, #ff8c00)',
+            color: '#000',
+            border: 'none',
+            borderRadius: '10px',
+            fontSize: '1.1rem',
+            fontWeight: 'bold',
+            cursor: keywords.trim() && !isLoading ? 'pointer' : 'not-allowed',
+            opacity: keywords.trim() && !isLoading ? 1 : 0.5,
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            if (keywords.trim() && !isLoading) {
+              e.target.style.background = 'linear-gradient(45deg, #ff8c00, #f4a724)';
+              e.target.style.transform = 'translateY(-2px)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (keywords.trim() && !isLoading) {
+              e.target.style.background = 'linear-gradient(45deg, #f4a724, #ff8c00)';
+              e.target.style.transform = 'translateY(0)';
+            }
+          }}
         >
           {isLoading ? 'Casting...' : 'Cast My Perfect Build'}
         </button>
       </form>
-      
-      {isLoading && <LoadingSpinner />}
     </div>
   );
 };
