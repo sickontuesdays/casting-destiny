@@ -1,5 +1,5 @@
 import { getManifestComponent } from '../../../lib/bungie-api';
-import { processKeywords } from '../../../lib/destiny-data';
+import { parseAdvancedSearch, processAdvancedKeywords, findAdvancedSynergisticItems } from '../../../lib/advanced-search-parser';
 
 let cachedData = null;
 let cacheTimestamp = null;
@@ -38,48 +38,6 @@ const loadDestinyData = async () => {
   }
 };
 
-const findSynergisticItems = (keywords, destinyData) => {
-  const results = [];
-  const { inventoryItems } = destinyData;
-  
-  Object.values(inventoryItems).forEach(item => {
-    if (!item.displayProperties?.name || !item.displayProperties?.description) {
-      return;
-    }
-    
-    const itemText = `${item.displayProperties.name} ${item.displayProperties.description}`.toLowerCase();
-    const matchedKeywords = keywords.filter(keyword => itemText.includes(keyword));
-    
-    if (matchedKeywords.length > 0) {
-      // Determine item type
-      let itemType = 'Unknown';
-      if (item.itemCategoryHashes) {
-        if (item.itemCategoryHashes.includes(20)) itemType = 'Armor';
-        if (item.itemCategoryHashes.includes(1)) itemType = 'Weapon';
-        if (item.itemCategoryHashes.includes(59)) itemType = 'Mod';
-      }
-      
-      // Check if it's an exotic
-      if (item.inventory?.tierTypeName === 'Exotic' || item.itemTypeDisplayName === 'Exotic') {
-        itemType = `Exotic ${itemType}`;
-      }
-      
-      results.push({
-        hash: item.hash,
-        name: item.displayProperties.name,
-        description: item.displayProperties.description,
-        type: itemType,
-        icon: item.displayProperties.icon,
-        matchedKeywords,
-        synergyScore: Math.round((matchedKeywords.length / keywords.length) * 100),
-        rarity: item.inventory?.tierTypeName || 'Common'
-      });
-    }
-  });
-  
-  return results.sort((a, b) => b.synergyScore - a.synergyScore);
-};
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
@@ -95,15 +53,23 @@ export default async function handler(req, res) {
       });
     }
 
-    const keywords = processKeywords(rawKeywords);
+    // Parse the advanced search syntax
+    const parsedSearch = parseAdvancedSearch(rawKeywords);
+    const processedKeywords = processAdvancedKeywords(parsedSearch);
+    
     const destinyData = await loadDestinyData();
-    const results = findSynergisticItems(keywords, destinyData);
+    const results = findAdvancedSynergisticItems(processedKeywords, destinyData);
     
     res.status(200).json({ 
       success: true, 
       results: results.slice(0, 20), // Limit to top 20 results
       totalFound: results.length,
-      processedKeywords: keywords
+      searchBreakdown: {
+        included: processedKeywords.include,
+        excluded: processedKeywords.exclude,
+        exactPhrases: processedKeywords.exactPhrases,
+        originalQuery: parsedSearch.originalInput
+      }
     });
     
   } catch (error) {
