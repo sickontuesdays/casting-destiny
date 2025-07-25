@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 const BuildCreator = ({ onSearch, isLoading }) => {
   const [keywords, setKeywords] = useState('');
+  const [showAdvancedHelp, setShowAdvancedHelp] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,6 +17,14 @@ const BuildCreator = ({ onSearch, isLoading }) => {
     setKeywords(newValue);
   };
 
+  const advancedExamples = [
+    'grenade -warlock',
+    '"auto reload" solar',
+    'super energy -pvp',
+    '"never reload" -exotic',
+    'invisibility "void hunter"'
+  ];
+
   return (
     <div style={{
       background: 'rgba(255, 255, 255, 0.1)',
@@ -29,14 +38,14 @@ const BuildCreator = ({ onSearch, isLoading }) => {
         color: '#f4a724',
         marginBottom: '15px',
         fontSize: '1.3rem'
-      }}>What are you looking for today?</h2>
+      }}>What's Your Playstyle?</h2>
       
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           value={keywords}
           onChange={(e) => setKeywords(e.target.value)}
-          placeholder="e.g., constant grenades, never reload, fast super, invisibility chains..."
+          placeholder='e.g., "constant grenades" -warlock, super energy, "never reload" solar'
           style={{
             width: '100%',
             padding: '15px',
@@ -57,6 +66,83 @@ const BuildCreator = ({ onSearch, isLoading }) => {
             e.target.style.boxShadow = 'none';
           }}
         />
+
+        {/* Advanced Search Help Toggle */}
+        <div style={{ marginBottom: '15px' }}>
+          <button
+            type="button"
+            onClick={() => setShowAdvancedHelp(!showAdvancedHelp)}
+            style={{
+              background: 'none',
+              border: '1px solid rgba(244, 167, 36, 0.3)',
+              color: '#f4a724',
+              padding: '5px 10px',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '0.8rem',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.borderColor = '#f4a724';
+              e.target.style.background = 'rgba(244, 167, 36, 0.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.borderColor = 'rgba(244, 167, 36, 0.3)';
+              e.target.style.background = 'none';
+            }}
+          >
+            {showAdvancedHelp ? '▼' : '▶'} Advanced Search Tips
+          </button>
+        </div>
+
+        {/* Advanced Search Help */}
+        {showAdvancedHelp && (
+          <div style={{
+            background: 'rgba(0, 0, 0, 0.2)',
+            borderRadius: '8px',
+            padding: '15px',
+            marginBottom: '15px',
+            border: '1px solid rgba(244, 167, 36, 0.2)'
+          }}>
+            <h4 style={{ color: '#f4a724', marginBottom: '10px', fontSize: '1rem' }}>
+              Advanced Search Syntax:
+            </h4>
+            <div style={{ color: '#b3b3b3', fontSize: '0.9rem', lineHeight: '1.4' }}>
+              <div style={{ marginBottom: '8px' }}>
+                <strong style={{ color: '#e6e6e6' }}>Exclude terms:</strong> Use <code style={{ background: 'rgba(244, 167, 36, 0.2)', padding: '2px 4px', borderRadius: '3px' }}>-term</code>
+              </div>
+              <div style={{ marginBottom: '8px' }}>
+                <strong style={{ color: '#e6e6e6' }}>Exact phrases:</strong> Use <code style={{ background: 'rgba(244, 167, 36, 0.2)', padding: '2px 4px', borderRadius: '3px' }}>"exact phrase"</code>
+              </div>
+              <div style={{ marginBottom: '10px' }}>
+                <strong style={{ color: '#e6e6e6' }}>Examples:</strong>
+              </div>
+              {advancedExamples.map((example, index) => (
+                <div
+                  key={index}
+                  onClick={() => setKeywords(example)}
+                  style={{
+                    background: 'rgba(244, 167, 36, 0.1)',
+                    padding: '5px 8px',
+                    borderRadius: '4px',
+                    margin: '2px 0',
+                    cursor: 'pointer',
+                    transition: 'background 0.2s ease',
+                    fontFamily: 'monospace'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = 'rgba(244, 167, 36, 0.2)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = 'rgba(244, 167, 36, 0.1)';
+                  }}
+                >
+                  {example}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '20px' }}>
           {['constant grenades', 'never reload', 'fast super', 'invisibility', 'healing', 'melee damage'].map((suggestion) => (
@@ -116,7 +202,7 @@ const BuildCreator = ({ onSearch, isLoading }) => {
             }
           }}
         >
-          {isLoading ? 'Searching...' : 'Deploy Keyword Search'}
+          {isLoading ? 'Casting...' : 'Cast My Perfect Build'}
         </button>
       </form>
     </div>
